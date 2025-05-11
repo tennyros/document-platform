@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,12 +35,17 @@ public class DocumentController {
 
     @GetMapping("/download/{name}")
     public ResponseEntity<byte[]> download(@PathVariable String name) throws Exception {
-        InputStream inputStream = documentService.downloadDocument(name);
-        byte[] bytes = inputStream.readAllBytes();
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + name + "\"")
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .body(bytes);
+        String contentType = Files.probeContentType(Paths.get(name));
+        if (contentType == null) {
+            contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
+        }
+        try (InputStream inputStream = documentService.downloadDocument(name)) {
+            byte[] bytes = inputStream.readAllBytes();
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + name + "\"")
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .body(bytes);
+        }
     }
 
     @DeleteMapping("/delete/{name}")
