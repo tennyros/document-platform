@@ -1,0 +1,45 @@
+services:
+
+  postgres:
+    image: postgres:14-alpine     # 🪶 Alpine-версия (~40-50 MB)
+    container_name: postgres
+    environment:
+      POSTGRES_DB: document_management_service_app
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5434:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  mongodb:
+    image: mongo:6-jammy          # 🪶 Ubuntu jammy (весит меньше full ubuntu, стабильна)
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodata:/data/db
+
+  minio:
+    image: minio/minio:latest
+    platform: linux/amd64
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - ./minio-data:/data
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server --console-address ":9001" /data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  pgdata:
+  mongodata:
+  miniodata:
