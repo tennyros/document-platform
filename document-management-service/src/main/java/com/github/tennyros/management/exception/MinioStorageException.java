@@ -1,6 +1,6 @@
 package com.github.tennyros.management.exception;
 
-public class MinioStorageException extends RuntimeException {
+public class MinioStorageException extends BaseInternalServerException {
 
     public MinioStorageException(String message) {
         super(message);
