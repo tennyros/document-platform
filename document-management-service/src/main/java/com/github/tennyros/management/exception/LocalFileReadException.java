@@ -1,6 +1,6 @@
 package com.github.tennyros.management.exception;
 
-public class LocalFileReadException extends RuntimeException {
+public class LocalFileReadException extends BaseInternalServerException {
 
     public LocalFileReadException(String message) {
         super(message);
