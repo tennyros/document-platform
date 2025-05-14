@@ -4,7 +4,7 @@ import com.github.tennyros.management.dto.DocumentUploadRequestDto;
 import com.github.tennyros.management.exception.DocumentNotFoundException;
 import com.github.tennyros.management.exception.DocumentUploadProcessException;
 import com.github.tennyros.management.mapper.DocumentMapper;
-import com.github.tennyros.management.model.Document;
+import com.github.tennyros.management.entity.Document;
 import com.github.tennyros.management.repository.DocumentVersionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
