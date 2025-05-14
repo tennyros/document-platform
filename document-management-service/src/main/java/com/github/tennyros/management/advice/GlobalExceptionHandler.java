@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RestControllerAdvice
-public class ApiExceptionHandler {
+public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(DocumentNotFoundException.class)

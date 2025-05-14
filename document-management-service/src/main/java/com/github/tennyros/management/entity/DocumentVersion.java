@@ -1,4 +1,4 @@
-package com.github.tennyros.management.model;
+package com.github.tennyros.management.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,7 +36,7 @@ public class DocumentVersion {
 
     private String storageKey;
 
-    private String versionLabel;
+    private long versionNumber;
 
     private LocalDateTime uploadedAt;
 
