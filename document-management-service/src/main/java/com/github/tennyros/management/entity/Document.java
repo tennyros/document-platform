@@ -1,4 +1,4 @@
-package com.github.tennyros.management.model;
+package com.github.tennyros.management.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
