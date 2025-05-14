@@ -1,10 +1,11 @@
-package com.github.tennyros.management.service;
+package com.github.tennyros.management.service.impl;
 
 import com.github.tennyros.management.exception.DocumentNotFoundException;
 import com.github.tennyros.management.entity.Document;
 import com.github.tennyros.management.entity.DocumentVersion;
 import com.github.tennyros.management.repository.DocumentRepository;
 import com.github.tennyros.management.repository.DocumentVersionRepository;
+import com.github.tennyros.management.service.DocumentMetadataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,13 +17,12 @@ import java.util.Optional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class DocumentMetadataService {
+public class DocumentMetadataServiceImpl implements DocumentMetadataService {
 
     private final DocumentRepository documentRepository;
     private final DocumentVersionRepository documentVersionRepository;
 
     @Override
-    @Transactional
     public void saveDocumentWithVersion(MultipartFile file, Document document, String objectName) {
 
         Optional<Document> existingDocumentOpt = documentRepository.findByTitle(document.getTitle());
@@ -55,7 +55,7 @@ public class DocumentMetadataService {
         documentVersionRepository.save(documentVersion);
     }
 
-
+    @Override
     public void deleteDocumentWithVersion(String objectName) {
         DocumentVersion version = documentVersionRepository.findByStorageKey(objectName)
                 .orElseThrow(() -> new DocumentNotFoundException("File with object name " + objectName + " not found"));

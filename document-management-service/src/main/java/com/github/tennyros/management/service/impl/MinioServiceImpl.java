@@ -1,4 +1,4 @@
-package com.github.tennyros.management.service;
+package com.github.tennyros.management.service.impl;
 
 import com.github.tennyros.management.config.MinioProperties;
 import com.github.tennyros.management.exception.FileAccessDeniedException;
@@ -6,6 +6,7 @@ import com.github.tennyros.management.exception.DocumentNotFoundException;
 import com.github.tennyros.management.exception.FileUploadException;
 import com.github.tennyros.management.exception.LocalFileReadException;
 import com.github.tennyros.management.exception.MinioStorageException;
+import com.github.tennyros.management.service.MinioService;
 import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
@@ -24,11 +25,12 @@ import java.util.UUID;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MinioService {
+public class MinioServiceImpl implements MinioService {
 
     private final MinioClient minioClient;
     private final MinioProperties minioProperties;
 
+    @Override
     public String upload(MultipartFile file) {
         String objectName = UUID.randomUUID() + "_" + file.getOriginalFilename();
 
@@ -59,6 +61,7 @@ public class MinioService {
         }
     }
 
+    @Override
     public InputStream download(String objectName) {
         try {
             return minioClient.getObject(
@@ -83,6 +86,7 @@ public class MinioService {
         }
     }
 
+    @Override
     public void delete(String objectName) {
         log.info("Deleting document from MinIO server");
         try {
