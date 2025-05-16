@@ -15,3 +15,10 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+logging:
+  level:
+    root: info
+
+app:
+  name: document-management-service
