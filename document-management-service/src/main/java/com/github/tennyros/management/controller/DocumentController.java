@@ -1,10 +1,18 @@
 package com.github.tennyros.management.controller;
 
-import com.github.tennyros.management.dto.DocumentUploadRequestDto;
+import com.github.tennyros.management.dto.request.DocumentFilter;
+import com.github.tennyros.management.dto.response.DocumentResponse;
+import com.github.tennyros.management.dto.request.DocumentUploadRequest;
+import com.github.tennyros.management.dto.response.PageResponse;
+import com.github.tennyros.management.entity.Document;
 import com.github.tennyros.management.exception.FileAccessDeniedException;
-import com.github.tennyros.management.service.impl.DocumentServiceImpl;
+import com.github.tennyros.management.mapper.DocumentMapper;
+import com.github.tennyros.management.mapper.PageMapper;
+import com.github.tennyros.management.service.DocumentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,11 +36,14 @@ import java.nio.file.Paths;
 @RequestMapping("/api/v1/documents")
 public class DocumentController {
 
-    private final DocumentServiceImpl documentServiceImpl;
+    private final DocumentService documentService;
+
+    private final PageMapper pageMapper;
+    private final DocumentMapper documentMapper;
 
     @PostMapping("/upload")
-    public ResponseEntity<String> upload(@Valid @ModelAttribute DocumentUploadRequestDto metadata) {
-        String objectName = documentServiceImpl.uploadDocument(metadata);
+    public ResponseEntity<String> upload(@Valid @ModelAttribute DocumentUploadRequest metadata) {
+        String objectName = documentService.uploadDocument(metadata);
         return ResponseEntity.ok(objectName);
     }
 
@@ -44,7 +55,7 @@ public class DocumentController {
             if (contentType == null) {
                 contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
             }
-            try (InputStream inputStream = documentServiceImpl.downloadDocument(name)) {
+            try (InputStream inputStream = documentService.downloadDocument(name)) {
                 log.debug("Successfully fetched from Minio file: {}", name);
                 byte[] bytes = inputStream.readAllBytes();
                 return ResponseEntity.ok()
@@ -62,7 +73,15 @@ public class DocumentController {
     @DeleteMapping("/delete/{name}")
     public ResponseEntity<String> delete(@PathVariable String name) {
         log.info("Deleting {} document", name);
-        documentServiceImpl.deleteDocument(name);
+        documentService.deleteDocument(name);
         return ResponseEntity.ok("Deleted: " + name);
     }
+
+    @GetMapping
+    public PageResponse<DocumentResponse> getFilteredDocuments(@Valid @ModelAttribute DocumentFilter filterDto,
+                                                               Pageable pageable) {
+        Page<Document> page = documentService.filterDocuments(filterDto, pageable);
+        return pageMapper.toPageResponse(page, documentMapper::toDto);
+    }
+
 }
