@@ -47,5 +47,6 @@ docker-compose.yml
 ### Logs ###
 *logs
 
-### Environment Credentials ###
+### Credentials ###
 .env
+.secrets
