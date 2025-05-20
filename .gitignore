@@ -43,3 +43,9 @@ minio-data/
 
 ### Docker ###
 docker-compose.yml
+
+### Logs ###
+*logs
+
+### Environment Credentials ###
+.env
