@@ -3,7 +3,7 @@ spring:
     activate:
       on-profile: dev
   datasource:
-    url: jdbc:${DB_BASE:postgresql}://${DB_SERVER:localhost}:${DB_PORT:5434}/${DB_NAME:postgres}
+    url: jdbc:${DB_BASE:postgresql}://${DB_SERVER:localhost}:${DB_PORT:5436}/${DB_NAME:document-management-service-db}
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:root}
   data:
