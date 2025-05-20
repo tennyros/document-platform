@@ -2,17 +2,15 @@ package com.github.tennyros.management.specification;
 
 import com.github.tennyros.management.entity.Document;
 import com.github.tennyros.management.entity.DocumentVersion;
+import lombok.experimental.UtilityClass;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import java.time.LocalDateTime;
 
+@UtilityClass
 public class DocumentSpecification {
-
-    private DocumentSpecification() {
-        throw new UnsupportedOperationException("Utility class");
-    }
 
     public static Specification<Document> hasTitle(String title) {
         return (root, query, cb) ->
