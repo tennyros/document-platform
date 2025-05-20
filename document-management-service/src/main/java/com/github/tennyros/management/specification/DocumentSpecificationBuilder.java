@@ -2,13 +2,11 @@ package com.github.tennyros.management.specification;
 
 import com.github.tennyros.management.dto.request.DocumentFilter;
 import com.github.tennyros.management.entity.Document;
+import lombok.experimental.UtilityClass;
 import org.springframework.data.jpa.domain.Specification;
 
+@UtilityClass
 public class DocumentSpecificationBuilder {
-
-    private DocumentSpecificationBuilder() {
-        throw new UnsupportedOperationException("Utility class");
-    }
 
     public static Specification<Document> build(DocumentFilter dto) {
         Specification<Document> spec = Specification.where(null);
