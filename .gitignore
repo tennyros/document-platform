@@ -50,3 +50,9 @@ docker-compose.yml
 ### Credentials ###
 .env
 .secrets
+
+### Extra info ###
+info.md
+
+### liquibase ###
+document-management-service/liquibase.properties

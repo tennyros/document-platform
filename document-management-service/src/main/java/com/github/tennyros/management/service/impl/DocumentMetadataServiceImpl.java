@@ -3,15 +3,17 @@ package com.github.tennyros.management.service.impl;
 import com.github.tennyros.management.exception.DocumentNotFoundException;
 import com.github.tennyros.management.entity.Document;
 import com.github.tennyros.management.entity.DocumentVersion;
-import com.github.tennyros.management.repository.DocumentRepository;
-import com.github.tennyros.management.repository.DocumentVersionRepository;
+import com.github.tennyros.management.repository.jpa.DocumentRepository;
+import com.github.tennyros.management.repository.jpa.DocumentVersionRepository;
 import com.github.tennyros.management.service.DocumentMetadataService;
+import com.github.tennyros.management.service.DocumentVersionMetadataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -21,6 +23,7 @@ public class DocumentMetadataServiceImpl implements DocumentMetadataService {
 
     private final DocumentRepository documentRepository;
     private final DocumentVersionRepository documentVersionRepository;
+    private final DocumentVersionMetadataService documentVersionMetadataService;
 
     @Override
     public void saveDocumentWithVersion(MultipartFile file, Document document, String objectName) {
@@ -52,7 +55,14 @@ public class DocumentMetadataServiceImpl implements DocumentMetadataService {
                 .document(savedDocument)
                 .build();
 
-        documentVersionRepository.save(documentVersion);
+        DocumentVersion savedVersion = documentVersionRepository.save(documentVersion);
+
+        Map<String, Object> defaultAttributes = Map.of(
+                "status", "uploaded",
+                "timestamp", LocalDateTime.now().toString()
+        );
+
+        documentVersionMetadataService.saveMetadata(savedVersion.getId(), defaultAttributes);
     }
 
     @Override
@@ -60,8 +70,9 @@ public class DocumentMetadataServiceImpl implements DocumentMetadataService {
         DocumentVersion version = documentVersionRepository.findByStorageKey(objectName)
                 .orElseThrow(() -> new DocumentNotFoundException("File with object name " + objectName + " not found"));
 
+        documentVersionMetadataService.deleteMetadata(version.getId());
+
         Document document = version.getDocument();
         documentRepository.delete(document);
     }
-
 }

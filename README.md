@@ -23,7 +23,7 @@ This repository contains the implementation of the **Document Management Service
 - PostgreSQL
 - MinIO
 - Docker, Docker Compose
-- Elasticsearch + Logback + Kibana (logging)
+- Elasticsearch + Logstash + Kibana (logging)
 
 ## Quick Start
 

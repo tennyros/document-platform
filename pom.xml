@@ -11,9 +11,10 @@
     <name>Document Platform Parent</name>
 
     <modules>
-        <!-- <module>document-management-service</module> -->
-        <!-- <module>document-signing-service</module> -->
         <module>document-management-service</module>
+<!--        <module>document-conversion-service</module>-->
+<!--        <module>document-signing-service</module>-->
+<!--        <module>notification-service</module>-->
         <module>logging-starter</module>
     </modules>
 

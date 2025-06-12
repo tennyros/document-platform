@@ -11,5 +11,4 @@ public interface MinioService {
     InputStream download(String objectName);
 
     void delete(String objectName);
-
 }

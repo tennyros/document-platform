@@ -9,5 +9,4 @@ public class FileAccessDeniedException extends RuntimeException {
     public FileAccessDeniedException(String message, Throwable cause) {
         super(message, cause);
     }
-
 }

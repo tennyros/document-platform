@@ -6,8 +6,8 @@ import com.github.tennyros.management.entity.Document;
 import com.github.tennyros.management.exception.DocumentNotFoundException;
 import com.github.tennyros.management.exception.DocumentUploadProcessException;
 import com.github.tennyros.management.mapper.DocumentMapper;
-import com.github.tennyros.management.repository.DocumentRepository;
-import com.github.tennyros.management.repository.DocumentVersionRepository;
+import com.github.tennyros.management.repository.jpa.DocumentRepository;
+import com.github.tennyros.management.repository.jpa.DocumentVersionRepository;
 import com.github.tennyros.management.service.DocumentService;
 import com.github.tennyros.management.specification.DocumentSpecificationBuilder;
 import lombok.RequiredArgsConstructor;
@@ -68,5 +68,4 @@ public class DocumentServiceImpl implements DocumentService {
         Specification<Document> spec = DocumentSpecificationBuilder.build(filterDto);
         return documentRepository.findAll(spec, pageable);
     }
-
 }

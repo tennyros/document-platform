@@ -9,5 +9,4 @@ public class MinioBucketCreationException extends RuntimeException {
     public MinioBucketCreationException(String message, Throwable cause) {
         super(message, cause);
     }
-
 }
