@@ -23,7 +23,7 @@
 - PostgreSQL
 - MinIO
 - Docker, Docker Compose
-- Elasticsearch + Logback + Kibana (логирование)
+- Elasticsearch + Logstash + Kibana (логирование)
 
 ## Быстрый старт
 

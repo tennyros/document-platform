@@ -1,8 +1,58 @@
 services:
 
+  document-management-service:
+    image: document-management-service:0.0.1
+    container_name: document-management-service
+    restart: no
+    build:
+      context: .
+      dockerfile: document-management-service/Dockerfile
+    environment:
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_NAME: ${DB_NAME}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+
+      MONGO_HOST: ${MONGO_HOST}
+      MONGO_PORT: ${MONGO_PORT}
+      MONGO_DB: ${MONGO_DB}
+
+      MINIO_URL: ${MINIO_URL}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+
+      SPRING_PROFILES_ACTIVE: dev
+    ports:
+      - "8090:8080"
+    networks:
+      - app-net
+      - log-net
+    depends_on:
+      document-management-service-db:
+        condition: service_healthy
+
+  document-signing-service:
+    image: document-signing-service:0.0.1
+    container_name: document-signing-service
+    restart: no
+    build:
+      context: .
+      dockerfile: document-signing-service/Dockerfile
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+    ports:
+      - "8091:8081"
+    networks:
+      - app-net
+      - log-net
+    depends_on:
+      - document-management-service
+
   document-management-service-db:
     image: postgres:14-alpine
     container_name: document-management-service-db
+    restart: on-failure
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USERNAME}
@@ -18,38 +68,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 20
-
-  document-management-service:
-    image: document-management-service:0.0.1
-    container_name: document-management-service
-    build:
-      context: .
-      dockerfile: document-management-service/Dockerfile
-    environment:
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_USERNAME: ${DB_USERNAME}
-      DB_NAME: ${DB_NAME}
-      DB_SERVER: ${DB_SERVER}
-      DB_PORT: ${DB_PORT}
-
-      MONGO_HOST: ${MONGO_HOST}
-      MONGO_PORT: ${MONGO_PORT}
-      MONGO_DB: ${MONGO_DB}
-
-      MINIO_URL: ${MINIO_URL}
-      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
-      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
-
-      SPRING_PROFILES_ACTIVE: dev
-    ports:
-      - "8088:8080"
-    networks:
-      - app-net
-      - log-net
-    depends_on:
-      document-management-service-db:
-        condition: service_healthy
-    restart: on-failure
 
   mongodb:
     image: mongo:6-jammy
@@ -73,8 +91,8 @@ services:
     volumes:
       - ./minio-data:/data
     environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
     command: server --console-address ":9001" /data
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]

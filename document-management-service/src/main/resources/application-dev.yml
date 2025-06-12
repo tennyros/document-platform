@@ -3,16 +3,16 @@ spring:
     activate:
       on-profile: dev
   datasource:
-    url: jdbc:${DB_BASE:postgresql}://${DB_SERVER:localhost}:${DB_PORT:5436}/${DB_NAME:document-management-service-db}
-    username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:root}
+    url: jdbc:${DB_BASE}://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   data:
     mongodb:
-      uri: mongodb://${MONGO_HOST:localhost}:${MONGO_PORT:27017}/${MONGO_DB:documents}
+      uri: mongodb://${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB}
 minio:
-  url: ${MINIO_URL:http://localhost:9000}
-  access-key: ${MINIO_ACCESS_KEY:minioadmin}
-  secret-key: ${MINIO_SECRET_KEY:minioadmin}
-  bucket: ${MINIO_BUCKET:documents}
+  url: ${MINIO_URL}
+  access-key: ${MINIO_ACCESS_KEY}
+  secret-key: ${MINIO_SECRET_KEY}
+  bucket: ${MINIO_BUCKET}
 
 environment: dev
