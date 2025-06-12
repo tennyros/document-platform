@@ -9,5 +9,4 @@ public class BaseInternalServerException extends RuntimeException {
     public BaseInternalServerException(String message, Throwable cause) {
         super(message, cause);
     }
-
 }

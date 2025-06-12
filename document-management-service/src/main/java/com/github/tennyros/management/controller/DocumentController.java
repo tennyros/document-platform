@@ -83,5 +83,4 @@ public class DocumentController {
         Page<Document> page = documentService.filterDocuments(filterDto, pageable);
         return pageMapper.toPageResponse(page, documentMapper::toDto);
     }
-
 }

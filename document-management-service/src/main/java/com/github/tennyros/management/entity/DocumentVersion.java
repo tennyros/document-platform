@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
@@ -44,4 +45,8 @@ public class DocumentVersion {
     @JoinColumn(name = "document_id")
     private Document document;
 
+    private String metadataId;
+
+    @Lob
+    private byte[] signature;
 }

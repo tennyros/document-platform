@@ -20,5 +20,4 @@ public class DocumentResponse {
     private String description;
 
     private LocalDateTime createdAt;
-
 }

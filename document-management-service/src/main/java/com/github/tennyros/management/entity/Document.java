@@ -39,5 +39,4 @@ public class Document {
 
     @OneToMany(mappedBy = "document", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<DocumentVersion> versions = new ArrayList<>();
-
 }

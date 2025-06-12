@@ -9,5 +9,4 @@ public class DocumentUploadProcessException extends BaseInternalServerException 
     public DocumentUploadProcessException(String message, Throwable cause) {
         super(message, cause);
     }
-
 }

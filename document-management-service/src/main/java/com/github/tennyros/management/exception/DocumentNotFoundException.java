@@ -9,5 +9,4 @@ public class DocumentNotFoundException extends RuntimeException {
     public DocumentNotFoundException(String message, Throwable cause) {
         super(message, cause);
     }
-
 }

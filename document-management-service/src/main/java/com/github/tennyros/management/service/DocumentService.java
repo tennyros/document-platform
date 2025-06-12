@@ -17,5 +17,4 @@ public interface DocumentService {
     void deleteDocument(String objectName);
 
     Page<Document> filterDocuments(DocumentFilter filterDto, Pageable pageable);
-
 }
