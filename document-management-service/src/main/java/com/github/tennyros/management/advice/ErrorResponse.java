@@ -24,5 +24,4 @@ public class ErrorResponse {
 
     @JsonInclude(NON_NULL)
     private List<Map<String, Object>> errors;
-
 }

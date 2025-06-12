@@ -34,5 +34,4 @@ public class DocumentFilter {
 
     @Min(value = 0, message = "Version number must be positive")
     private Long versionNumber;
-
 }

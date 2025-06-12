@@ -1,4 +1,4 @@
-package com.github.tennyros.management.repository;
+package com.github.tennyros.management.repository.jpa;
 
 import com.github.tennyros.management.entity.Document;
 import com.github.tennyros.management.entity.DocumentVersion;

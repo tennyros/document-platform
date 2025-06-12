@@ -9,5 +9,4 @@ public class LocalFileReadException extends BaseInternalServerException {
     public LocalFileReadException(String message, Throwable cause) {
         super(message, cause);
     }
-
 }

@@ -8,5 +8,4 @@ public interface DocumentMetadataService {
     void saveDocumentWithVersion(MultipartFile file, Document document, String objectName);
 
     void deleteDocumentWithVersion(String objectName);
-
 }

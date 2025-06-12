@@ -26,5 +26,4 @@ public class DocumentUploadRequest {
 
     @NotEmptyFile
     private MultipartFile file;
-
 }

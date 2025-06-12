@@ -24,7 +24,7 @@ public class MinioProperties {
     @NotBlank
     private String secretKey;
 
-    private String bucket = "documents";
-
+    @NotBlank
+    private String bucket;
 }
 
