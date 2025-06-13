@@ -1,6 +1,6 @@
 package com.github.tennyros.management.mapper;
 
-import com.github.tennyros.management.dto.response.PageResponse;
+import com.github.tennyros.management.dto.document.response.PageResponse;
 import org.mapstruct.Mapper;
 import org.springframework.data.domain.Page;
 

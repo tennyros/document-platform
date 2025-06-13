@@ -20,10 +20,13 @@ This repository contains the implementation of the **Document Management Service
 - Spring Boot 2.7
 - Spring Web
 - Hibernate / Spring Data JPA
-- PostgreSQL
+- PostgreSQL / Liquibase
+- MongoDB / Mongock
 - MinIO
-- Docker, Docker Compose
 - Elasticsearch + Logstash + Kibana (logging)
+- Docker, Docker Compose
+- MapStruct
+- Lombok
 
 ## Quick Start
 
@@ -61,7 +64,7 @@ docker-compose up -d
 **4. After that, the API will be available at:**
 
 ```url
-http://localhost:8088/swagger-ui.html
+http://localhost:8090/swagger-ui.html
 ```
 
 ## API Endpoints
@@ -69,10 +72,13 @@ http://localhost:8088/swagger-ui.html
 ### Document-management-service
 
 ```http
-POST   /documents/upload          - Upload a document
-GET    /documents                 - Retrieve a list of documents
-GET    /documents/download/{name} - Download a document by its UUID
-DELETE /documents/delete/{name}   - Delete a document by its UUID
+POST   /documents        - Upload a document
+GET    /documents        - Retrieve a list of documents with pagination and filtering
+DELETE /documents/{name} - Delete a document by its UUID
+
+POST   /documents/{documentId}/versions - Upload a document version
+DELETE /documents/{versionId}           - Delete certain document version
+GET    /documents/{documentId}/versions/{versionNumber}/download - Download certain document version
 ```
 
 ## CI Pipeline

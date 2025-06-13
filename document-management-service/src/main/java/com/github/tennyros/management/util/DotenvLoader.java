@@ -11,7 +11,7 @@ public class DotenvLoader {
     public static void load() {
         Dotenv dotenv = Dotenv.load();
 
-        // POSTGRE
+        // POSTGRESQL
         System.setProperty("DB_USERNAME", Objects.requireNonNull(dotenv.get("DB_USERNAME")));
         System.setProperty("DB_PASSWORD", Objects.requireNonNull(dotenv.get("DB_PASSWORD")));
         System.setProperty("DB_BASE", Objects.requireNonNull(dotenv.get("DB_BASE")));

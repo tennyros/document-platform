@@ -1,4 +1,4 @@
-package com.github.tennyros.management.dto.request;
+package com.github.tennyros.management.dto.document.request;
 
 import com.github.tennyros.management.annotation.NotEmptyFile;
 import lombok.AllArgsConstructor;

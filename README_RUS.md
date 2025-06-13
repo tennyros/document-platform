@@ -20,10 +20,13 @@
 - Spring Boot 2.7
 - Spring Web
 - Hibernate / Spring Data JPA
-- PostgreSQL
+- PostgreSQL / Liquibase
+- MongoDB / Mongock
 - MinIO
+- Elasticsearch + Logstash + Kibana (logging)
 - Docker, Docker Compose
-- Elasticsearch + Logstash + Kibana (логирование)
+- MapStruct
+- Lombok
 
 ## Быстрый старт
 
@@ -61,7 +64,7 @@ docker-compose up -d
 **4. После этого API будет доступен по адресу:**
 
 ```url
-http://localhost:8088/swagger-ui.html
+http://localhost:8090/swagger-ui.html
 ```
 
 ## API-эндпоинты
@@ -69,10 +72,13 @@ http://localhost:8088/swagger-ui.html
 ### Document-management-service
 
 ```http
-POST   /documents/upload          - Загрузить документ
-GET    /documents                 - Получить список документов
-GET    /documents/download/{name} - Получить документ по его UUID
-DELETE /documents/delete/{name}   - Удалить документ по его UUID
+POST   /documents        - Загрузить документ
+GET    /documents        - Получить список документов с пагинацией и фильтрацией
+DELETE /documents/{name} - Удалить документ по его UUID
+
+POST   /documents/{documentId}/versions - Загрузить версию документа
+DELETE /documents/{versionId}           - Удалить версию документа
+GET    /documents/{documentId}/versions/{versionNumber}/download - Скачать документ определенной версии
 ```
 
 ## CI Pipeline
