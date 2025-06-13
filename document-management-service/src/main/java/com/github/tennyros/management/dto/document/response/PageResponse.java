@@ -1,4 +1,4 @@
-package com.github.tennyros.management.dto.response;
+package com.github.tennyros.management.dto.document.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,7 +1,7 @@
 package com.github.tennyros.management.mapper;
 
-import com.github.tennyros.management.dto.response.DocumentResponse;
-import com.github.tennyros.management.dto.request.DocumentUploadRequest;
+import com.github.tennyros.management.dto.document.request.DocumentUploadRequest;
+import com.github.tennyros.management.dto.document.response.DocumentResponse;
 import com.github.tennyros.management.entity.Document;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

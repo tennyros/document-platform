@@ -1,6 +1,8 @@
 spring:
   application:
     name: document-management-service
+  app:
+    name: document-management-service
   servlet:
     multipart:
       max-file-size: 5MB
@@ -16,14 +18,14 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
+  data:
+    rest:
+      base-path: /api/v1
   liquibase:
     enabled: true
     change-log: classpath:/db/changelog/db.changelog-master.xml
-
 
 logging:
   level:
     root: info
 
-app:
-  name: document-management-service

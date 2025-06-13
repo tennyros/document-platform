@@ -1,4 +1,4 @@
-package com.github.tennyros.management.dto.request;
+package com.github.tennyros.management.dto.document.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,7 +18,6 @@ public class DocumentFilter {
 
     @Size(max = 100, message = "Title length must be less than or equal to 100 characters")
     private String title;
-
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime createdAfter;
