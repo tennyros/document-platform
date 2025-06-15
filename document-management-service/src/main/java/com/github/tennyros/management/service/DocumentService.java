@@ -10,7 +10,7 @@ public interface DocumentService {
 
     Document createDocument(DocumentUploadRequest request, String objectName);
 
-    void deleteDocument(String objectName);
+    void deleteDocument(Long documentId);
 
     Page<Document> filterDocuments(DocumentFilter filterDto, Pageable pageable);
 }

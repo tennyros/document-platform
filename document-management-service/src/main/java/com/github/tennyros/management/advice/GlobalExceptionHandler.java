@@ -1,8 +1,10 @@
 package com.github.tennyros.management.advice;
 
 import com.github.tennyros.management.exception.BaseInternalServerException;
+import com.github.tennyros.management.exception.BaseNotFoundException;
 import com.github.tennyros.management.exception.DocumentNotFoundException;
 import com.github.tennyros.management.exception.DocumentUploadProcessException;
+import com.github.tennyros.management.exception.DocumentVersionNotFoundException;
 import com.github.tennyros.management.exception.FileAccessDeniedException;
 import com.github.tennyros.management.exception.FileUploadException;
 import com.github.tennyros.management.exception.LocalFileReadException;
@@ -27,9 +29,8 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-
-    @ExceptionHandler(DocumentNotFoundException.class)
-    protected ResponseEntity<ErrorResponse> handleFileNotFound(DocumentNotFoundException ex,
+    @ExceptionHandler({DocumentNotFoundException.class, DocumentVersionNotFoundException.class})
+    protected ResponseEntity<ErrorResponse> handleFileNotFound(BaseNotFoundException ex,
                                                                HttpServletRequest request) {
         return buildErrorResponse(ex, HttpStatus.NOT_FOUND, request);
     }

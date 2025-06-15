@@ -9,6 +9,7 @@ import com.github.tennyros.management.mapper.DocumentMapper;
 import com.github.tennyros.management.mapper.PageMapper;
 import com.github.tennyros.management.service.DocumentOrchestrationService;
 import com.github.tennyros.management.service.DocumentService;
+import com.github.tennyros.management.util.ResponseFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -38,20 +39,25 @@ public class DocumentController {
 
     @PostMapping
     public ResponseEntity<DocumentResponse> upload(@Valid @ModelAttribute DocumentUploadRequest metadata) {
-        return ResponseEntity.ok(documentOrchestrationService.uploadDocument(metadata));
+        log.info("Uploading Document with name={}", metadata.getFile().getOriginalFilename());
+        DocumentResponse response = documentOrchestrationService.uploadDocument(metadata);
+        log.info("Upload completed successfully for Document with id={}", response.getId());
+        return ResponseFactory.created(response.getId(), response);
     }
 
     @GetMapping
     public PageResponse<DocumentResponse> getFilteredDocuments(@Valid @ModelAttribute DocumentFilter filterDto,
                                                                Pageable pageable) {
+        log.debug("Filtering Documents...");
         Page<Document> page = documentService.filterDocuments(filterDto, pageable);
         return pageMapper.toPageResponse(page, documentMapper::toDto);
     }
 
-    @DeleteMapping("/{name}")
-    public ResponseEntity<String> delete(@PathVariable String name) {
-        log.info("Deleting {} document", name);
-        documentService.deleteDocument(name);
-        return ResponseEntity.ok("Deleted: " + name);
+    @DeleteMapping("/{documentId}")
+    public ResponseEntity<Void> delete(@PathVariable Long documentId) {
+        log.info("Deleting Document with id={}", documentId);
+        documentService.deleteDocument(documentId);
+        log.info("Successfully deleted Document with id={}", documentId);
+        return ResponseFactory.noContent();
     }
 }

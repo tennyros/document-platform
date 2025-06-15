@@ -1,6 +1,6 @@
 package com.github.tennyros.management.exception;
 
-public class DocumentNotFoundException extends RuntimeException {
+public class DocumentNotFoundException extends BaseNotFoundException {
 
     public DocumentNotFoundException(String message) {
         super(message);

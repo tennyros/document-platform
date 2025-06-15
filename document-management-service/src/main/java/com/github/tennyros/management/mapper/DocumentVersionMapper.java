@@ -1,6 +1,6 @@
 package com.github.tennyros.management.mapper;
 
-import com.github.tennyros.management.dto.version.DocumentVersionResponse;
+import com.github.tennyros.management.dto.version.response.DocumentVersionResponse;
 import com.github.tennyros.management.entity.DocumentVersion;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
