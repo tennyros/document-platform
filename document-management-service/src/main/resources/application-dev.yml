@@ -16,3 +16,17 @@ minio:
   bucket: ${MINIO_BUCKET}
 
 environment: dev
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+      type:
+        descriptor:
+          sql:
+            BasicBinder: TRACE
+      engine:
+        jdbc:
+          batch:
+            internal: DEBUG
