@@ -8,6 +8,7 @@ import com.github.tennyros.management.exception.LocalFileReadException;
 import com.github.tennyros.management.exception.MinioStorageException;
 import com.github.tennyros.management.service.MinioService;
 import io.minio.GetObjectArgs;
+import io.minio.GetObjectResponse;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.RemoveObjectArgs;
@@ -34,7 +35,7 @@ public class MinioServiceImpl implements MinioService {
     public String upload(MultipartFile file) {
         String objectName = UUID.randomUUID() + "_" + file.getOriginalFilename();
 
-        log.info("Saving {} file to MinIO server", objectName);
+        log.debug("Saving File with storageKey={} to MinIO server", objectName);
         try {
             minioClient.putObject(
                     PutObjectArgs.builder()
@@ -44,7 +45,7 @@ public class MinioServiceImpl implements MinioService {
                             .contentType(file.getContentType())
                             .build()
             );
-            log.info("Successfully saved {} file to MinIO server", objectName);
+            log.debug("Successfully saved File with storageKey={} to MinIO server", objectName);
             return objectName;
         } catch (ErrorResponseException e) {
             log.error("Access denied when uploading {}: {}", objectName, e.getMessage(), e);
@@ -63,13 +64,15 @@ public class MinioServiceImpl implements MinioService {
 
     @Override
     public InputStream download(String objectName) {
+        log.debug("Getting File from storage with storageKey={}", objectName);
         try {
-            return minioClient.getObject(
+            GetObjectResponse objectResponse = minioClient.getObject(
                     GetObjectArgs.builder()
                             .bucket(minioProperties.getBucket())
                             .object(objectName)
-                            .build()
-            );
+                            .build());
+            log.debug("Successfully got File from storage with storageKey={}", objectName);
+            return objectResponse;
         } catch (ErrorResponseException e) {
             String code = e.errorResponse().code();
             if ("NoSuchKey".equals(code)) {
@@ -88,18 +91,18 @@ public class MinioServiceImpl implements MinioService {
 
     @Override
     public void delete(String objectName) {
-        log.info("Deleting document from MinIO server");
+        log.debug("Deleting File with storageKey={} from MinIO server", objectName);
         try {
             minioClient.removeObject(
                     RemoveObjectArgs.builder()
                             .bucket(minioProperties.getBucket())
                             .object(objectName)
-                            .build()
-            );
+                            .build());
+            log.debug("Successfully deleted File from storage with storageKey={}", objectName);
         } catch (ErrorResponseException e) {
             String code = e.errorResponse().code();
             if ("NoSuchKey".equals(code)) {
-                throw new DocumentNotFoundException("File not found: " + objectName, e);
+                throw new DocumentNotFoundException(String.format("File not found: %s", objectName), e);
             } else if ("AccessDenied".equals(code)) {
                 throw new FileAccessDeniedException("No access to delete: " + objectName, e);
             }
