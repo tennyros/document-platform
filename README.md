@@ -4,7 +4,7 @@
 ![Java 11](https://img.shields.io/badge/Java-11-blue)
 ![Spring Boot 2.7](https://img.shields.io/badge/Spring_Boot-2.7-brightgreen)
 
-[Русский](README_RUS.md) | [English](README.md)
+[Документация на русском языке](README_RUS.md)
 
 **Document Platform** is a microservice-based web application for managing electronic documents and reports.  
 This repository contains the implementation of the **Document Management Service** (DMS), responsible for:
@@ -19,6 +19,7 @@ This repository contains the implementation of the **Document Management Service
 - Java 11
 - Spring Boot 2.7
 - Spring Web
+- Spring Data REST
 - Hibernate / Spring Data JPA
 - PostgreSQL / Liquibase
 - MongoDB / Mongock
@@ -27,6 +28,7 @@ This repository contains the implementation of the **Document Management Service
 - Docker, Docker Compose
 - MapStruct
 - Lombok
+- SpringDoc OpenAPI 3 (Swagger UI)
 
 ## Quick Start
 
@@ -57,7 +59,7 @@ cp .env.example .env
 # Copy the example Docker Compose file
 cp docker-compose.example.yml docker-compose.yml  
 
-# Start services
+# Make sure the ports specified in docker-compose are not in use on your system and start
 docker-compose up -d
 ```
 
@@ -74,11 +76,11 @@ http://localhost:8090/swagger-ui.html
 ```http
 POST   /documents        - Upload a document
 GET    /documents        - Retrieve a list of documents with pagination and filtering
-DELETE /documents/{name} - Delete a document by its UUID
+DELETE /documents/{documentId} - Delete a document by its ID
 
 POST   /documents/{documentId}/versions - Upload a document version
-DELETE /documents/{versionId}           - Delete certain document version
-GET    /documents/{documentId}/versions/{versionNumber}/download - Download certain document version
+DELETE /documents/{documentId}/versions/{versionId}          - Delete certain document version
+GET    /documents/{documentId}/versions/{versionId}/download - Download certain document version
 ```
 
 ## CI Pipeline

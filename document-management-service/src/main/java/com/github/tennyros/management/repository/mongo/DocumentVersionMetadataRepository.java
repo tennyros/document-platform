@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface DocumentVersionMetadataRepository extends MongoRepository<DocumentVersionMetadata, String> {
 
     Optional<DocumentVersionMetadata> findByDocumentVersionId(Long documentVersionId);
+
+    void deleteByDocumentVersionId(Long documentVersionId);
 }

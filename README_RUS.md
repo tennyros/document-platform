@@ -4,7 +4,7 @@
 ![Java 11](https://img.shields.io/badge/Java-11-blue)
 ![Spring Boot 2.7](https://img.shields.io/badge/Spring_Boot-2.7-brightgreen)
 
-[Русский](README_RUS.md) | [English](README.md)
+[English documentation](README.md)
 
 **Document Platform** — микросервисное веб-приложение для управления электронными документами и отчетами.  
 Данный репозиторий содержит реализацию микросервиса **Document Management Service** (DMS), который отвечает за:
@@ -19,6 +19,7 @@
 - Java 11
 - Spring Boot 2.7
 - Spring Web
+- Spring Data REST
 - Hibernate / Spring Data JPA
 - PostgreSQL / Liquibase
 - MongoDB / Mongock
@@ -27,6 +28,7 @@
 - Docker, Docker Compose
 - MapStruct
 - Lombok
+- SpringDoc OpenAPI 3 (Swagger UI)
 
 ## Быстрый старт
 
@@ -57,7 +59,7 @@ cp .env.example .env
 # Скопируйте docker-compose.yml файл
 cp docker-compose.example.yml docker-compose.yml  
 
-# Запуск
+# Убедитесь, что порты на Вашей системе, указанные в docker-compose, не заняты и запустите
 docker-compose up -d
 ```
 
@@ -74,11 +76,11 @@ http://localhost:8090/swagger-ui.html
 ```http
 POST   /documents        - Загрузить документ
 GET    /documents        - Получить список документов с пагинацией и фильтрацией
-DELETE /documents/{name} - Удалить документ по его UUID
+DELETE /documents/{documentId} - Удалить документ по его ID
 
 POST   /documents/{documentId}/versions - Загрузить версию документа
-DELETE /documents/{versionId}           - Удалить версию документа
-GET    /documents/{documentId}/versions/{versionNumber}/download - Скачать документ определенной версии
+DELETE /documents/{documentId}/versions/{versionId}          - Удалить версию документа
+GET    /documents/{documentId}/versions/{versionId}/download - Скачать документ определенной версии
 ```
 
 ## CI Pipeline

@@ -1,7 +1,7 @@
 package com.github.tennyros.management.service;
 
 import com.github.tennyros.management.dto.document.request.DocumentUploadRequest;
-import com.github.tennyros.management.dto.version.DocumentVersionUploadRequest;
+import com.github.tennyros.management.dto.version.request.DocumentVersionUploadRequest;
 import com.github.tennyros.management.entity.Document;
 import com.github.tennyros.management.entity.DocumentVersion;
 
@@ -13,5 +13,5 @@ public interface DocumentVersionService {
 
     DocumentVersion getDocumentVersion(Long documentId, Long versionNumber);
 
-    void deleteDocumentWithVersion(Long documentId, Long versionNumber);
+    void deleteVersion(Long documentId, Long versionNumber);
 }

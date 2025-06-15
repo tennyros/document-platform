@@ -1,4 +1,4 @@
-package com.github.tennyros.management.dto.version;
+package com.github.tennyros.management.dto.version.request;
 
 import com.github.tennyros.management.annotation.NotEmptyFile;
 import lombok.AllArgsConstructor;
