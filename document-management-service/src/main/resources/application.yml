@@ -22,7 +22,6 @@ spring:
         order_inserts: true
         order_updates: true
         order_deletes: true
-        generate_statistics: true
   data:
     rest:
       base-path: /api/v1

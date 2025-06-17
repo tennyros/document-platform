@@ -13,7 +13,7 @@
     <artifactId>logging-starter</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>logging-starter</name>
+    <name>Logging Starter</name>
     <description>Custom starter for request logging</description>
 
     <properties>

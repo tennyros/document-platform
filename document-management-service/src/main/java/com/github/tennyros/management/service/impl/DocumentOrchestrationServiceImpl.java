@@ -25,12 +25,12 @@ import java.io.InputStream;
 @Service
 @RequiredArgsConstructor
 public class DocumentOrchestrationServiceImpl implements DocumentOrchestrationService {
-    private final DocumentMapper documentMapper;
 
     private final MinioService minioService;
     private final DocumentService documentService;
     private final DocumentVersionService documentVersionService;
 
+    private final DocumentMapper documentMapper;
     private final DocumentVersionMapper documentVersionMapper;
 
     @Override
@@ -70,7 +70,7 @@ public class DocumentOrchestrationServiceImpl implements DocumentOrchestrationSe
     @Override
     public DocumentFileDto downloadDocumentVersion(Long documentId, Long versionNumber) {
         log.debug("Starting download orchestration for Document with id={} and Version id={}", documentId, versionNumber);
-        DocumentVersion version = documentVersionService.getDocumentVersion(documentId, versionNumber);
+        DocumentVersionResponse version = documentVersionService.getDocumentVersion(documentId, versionNumber);
         InputStream inputStream = minioService.download(version.getStorageKey());
         return new DocumentFileDto(
                 version.getFilename(),
