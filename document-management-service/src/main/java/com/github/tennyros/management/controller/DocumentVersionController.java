@@ -42,11 +42,20 @@ public class DocumentVersionController {
         return ResponseFactory.created(response.getId(), response);
     }
 
-    @GetMapping("/{versionNumber}/download")
-    public ResponseEntity<InputStreamResource> download(@PathVariable Long documentId, @PathVariable Long versionNumber) {
-        log.info("Downloading Version with id={} for Document with id={}", versionNumber, documentId);
-        DocumentFileDto fileDto = documentOrchestrationService.downloadDocumentVersion(documentId, versionNumber);
-        log.info("Successfully Downloaded Version with id={} for Document with id={}", versionNumber, documentId);
+    @GetMapping("/{versionId}")
+    public ResponseEntity<DocumentVersionResponse> getDocumentVersion(@PathVariable Long documentId,
+                                                                      @PathVariable Long versionId) {
+        log.info("Fetching data of Version with id={} and Document with id={}", versionId, documentId);
+        DocumentVersionResponse response = documentVersionService.getDocumentVersion(documentId, versionId);
+        log.info("Successfully fetched data of Version with id={} and Document with id={}", versionId, documentId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{versionId}/download")
+    public ResponseEntity<InputStreamResource> download(@PathVariable Long documentId, @PathVariable Long versionId) {
+        log.info("Downloading Version with id={} of Document with id={}", versionId, documentId);
+        DocumentFileDto fileDto = documentOrchestrationService.downloadDocumentVersion(documentId, versionId);
+        log.info("Successfully Downloaded Version with id={} of Document with id={}", versionId, documentId);
         String contentDisposition = ContentDispositionUtil.buildContentDisposition(fileDto.getFilename());
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)

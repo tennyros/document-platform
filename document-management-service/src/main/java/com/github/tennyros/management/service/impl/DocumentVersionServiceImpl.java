@@ -3,10 +3,12 @@ package com.github.tennyros.management.service.impl;
 import com.github.tennyros.management.dto.document.request.DocumentUploadRequest;
 import com.github.tennyros.management.dto.version.DocumentVersionInfo;
 import com.github.tennyros.management.dto.version.request.DocumentVersionUploadRequest;
+import com.github.tennyros.management.dto.version.response.DocumentVersionResponse;
 import com.github.tennyros.management.entity.Document;
 import com.github.tennyros.management.entity.DocumentVersion;
 import com.github.tennyros.management.exception.DocumentNotFoundException;
 import com.github.tennyros.management.exception.DocumentVersionNotFoundException;
+import com.github.tennyros.management.mapper.DocumentVersionMapper;
 import com.github.tennyros.management.repository.jpa.DocumentRepository;
 import com.github.tennyros.management.repository.jpa.DocumentVersionRepository;
 import com.github.tennyros.management.service.DocumentVersionMetadataService;
@@ -28,9 +30,12 @@ import java.util.Optional;
 public class DocumentVersionServiceImpl implements DocumentVersionService {
 
     private final MinioService minioService;
+    private final DocumentVersionMetadataService documentVersionMetadataService;
+
     private final DocumentRepository documentRepository;
     private final DocumentVersionRepository documentVersionRepository;
-    private final DocumentVersionMetadataService documentVersionMetadataService;
+
+    private final DocumentVersionMapper documentVersionMapper;
 
     @Override
     @Transactional
@@ -82,13 +87,13 @@ public class DocumentVersionServiceImpl implements DocumentVersionService {
 
     @Override
     @Transactional(readOnly = true)
-    public DocumentVersion getDocumentVersion(Long documentId, Long versionNumber) {
+    public DocumentVersionResponse getDocumentVersion(Long documentId, Long versionNumber) {
         log.debug("Fetching information about Document Version with id={} of Document with id={} from PostgreSQL",
                 versionNumber, documentId);
-        return documentVersionRepository.findByDocumentIdAndVersionNumber(documentId, versionNumber)
+        return documentVersionMapper.toDto(documentVersionRepository.findByDocumentIdAndVersionNumber(documentId, versionNumber)
                 .orElseThrow(() ->
                         new DocumentNotFoundException(String.format(
-                                "For Document with id %d version id %d not found ", documentId, versionNumber)));
+                                "Version id %d of Document with id %d not found ", versionNumber, documentId))));
     }
 
     @Override
