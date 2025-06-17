@@ -1,6 +1,5 @@
-package com.github.tennyros;
+package com.github.tennyros.logging;
 
-import com.github.tennyros.logging.RequestIdFilter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
