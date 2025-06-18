@@ -14,18 +14,12 @@ import java.time.LocalDateTime;
 public class DocumentVersionResponse {
 
     private Long id;
-
     private Long documentId;
-
     private long versionNumber;
-
     private String filename;
-
     private String contentType;
-
     private long size;
-
     private String storageKey;
-
     private LocalDateTime uploadedAt;
+    private String hash;
 }
