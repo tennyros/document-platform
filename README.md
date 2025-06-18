@@ -71,17 +71,35 @@ http://localhost:8090/swagger-ui.html
 
 ## API Endpoints
 
-### Document-management-service
+### Document Management Service
 
-```http
-POST   /documents        - Upload a document
-GET    /documents        - Retrieve a list of documents with pagination and filtering
-DELETE /documents/{documentId} - Delete a document by its ID
+#### Documents
 
-POST   /documents/{documentId}/versions - Upload a document version
-DELETE /documents/{documentId}/versions/{versionId}          - Delete certain document version
-GET    /documents/{documentId}/versions/{versionId}/download - Download certain document version
-```
+| Method | Endpoint               | Description                                                |
+|--------|------------------------|------------------------------------------------------------|
+| POST   | `/documents`           | Upload a new document (metadata + file)                   |
+| GET    | `/documents`           | Retrieve a list of documents with pagination and filters  |
+| DELETE | `/documents/{documentId}` | Delete a document along with all its versions             |
+
+---
+
+#### Document Versions
+
+| Method | Endpoint                                                | Description                                                |
+|--------|---------------------------------------------------------|------------------------------------------------------------|
+| POST   | `/documents/{documentId}/versions`                      | Upload a new version for the specified document            |
+| DELETE | `/documents/{documentId}/versions/{versionId}`          | Delete a specific version of a document                    |
+| GET    | `/documents/{documentId}/versions/{versionId}/download` | Download a specific version of a document                  |
+
+---
+
+#### Signatures and Hashes (used by Document Signing Service)
+
+| Method | Endpoint                                                   | Description                                                |
+|--------|------------------------------------------------------------|------------------------------------------------------------|
+| GET    | `/documents/{documentId}/versions/{versionId}/hash`       | Retrieve the Base64-encoded hash of the document version   |
+| POST   | `/documents/{documentId}/versions/{versionId}/signatures` | Save a digital signature for the given document version    |
+|        |                                                            | _Invoked from Document Signing Service (DSS) via WebClient_ |
 
 ## CI Pipeline
 

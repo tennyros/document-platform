@@ -13,6 +13,7 @@ import com.github.tennyros.management.repository.jpa.DocumentRepository;
 import com.github.tennyros.management.repository.jpa.DocumentVersionRepository;
 import com.github.tennyros.management.service.DocumentVersionMetadataService;
 import com.github.tennyros.management.service.DocumentVersionService;
+import com.github.tennyros.management.service.HashService;
 import com.github.tennyros.management.service.MinioService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
@@ -31,6 +34,7 @@ public class DocumentVersionServiceImpl implements DocumentVersionService {
 
     private final MinioService minioService;
     private final DocumentVersionMetadataService documentVersionMetadataService;
+    private final HashService hashService;
 
     private final DocumentRepository documentRepository;
     private final DocumentVersionRepository documentVersionRepository;
@@ -126,6 +130,13 @@ public class DocumentVersionServiceImpl implements DocumentVersionService {
     private DocumentVersion buildDocumentVersion(
             MultipartFile file, String objectName, Document document, Long version) {
 
+        String hash;
+        try (InputStream inputStream = file.getInputStream()) {
+            hash = hashService.calculateSHA256(inputStream);
+        } catch (IOException e) {
+            throw new IllegalStateException("Unable to read file for hash calculation", e);
+        }
+
         return DocumentVersion.builder()
                 .filename(file.getOriginalFilename())
                 .contentType(file.getContentType())
@@ -134,6 +145,7 @@ public class DocumentVersionServiceImpl implements DocumentVersionService {
                 .versionNumber(version)
                 .uploadedAt(LocalDateTime.now())
                 .document(document)
+                .hash(hash)
                 .build();
     }
 }

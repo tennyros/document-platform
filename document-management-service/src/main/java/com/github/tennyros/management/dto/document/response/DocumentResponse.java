@@ -14,10 +14,7 @@ import java.time.LocalDateTime;
 public class DocumentResponse {
 
     private Long id;
-
     private String title;
-
     private String description;
-
     private LocalDateTime createdAt;
 }

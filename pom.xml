@@ -16,6 +16,7 @@
 <!--        <module>document-signing-service</module>-->
 <!--        <module>notification-service</module>-->
         <module>logging-starter</module>
+        <module>document-api-dto</module>
     </modules>
 
 </project>
