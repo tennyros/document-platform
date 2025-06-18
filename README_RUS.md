@@ -71,17 +71,35 @@ http://localhost:8090/swagger-ui.html
 
 ## API-эндпоинты
 
-### Document-management-service
+### Document Management Service
 
-```http
-POST   /documents        - Загрузить документ
-GET    /documents        - Получить список документов с пагинацией и фильтрацией
-DELETE /documents/{documentId} - Удалить документ по его ID
+#### Документы
 
-POST   /documents/{documentId}/versions - Загрузить версию документа
-DELETE /documents/{documentId}/versions/{versionId}          - Удалить версию документа
-GET    /documents/{documentId}/versions/{versionId}/download - Скачать документ определенной версии
-```
+| Метод | Endpoint            | Описание                                             |
+|-------|---------------------|------------------------------------------------------|
+| POST  | `/documents`        | Загрузить новый документ (метаданные + файл)         |
+| GET   | `/documents`        | Получить список документов с пагинацией и фильтрацией|
+| DELETE| `/documents/{documentId}` | Удалить документ и все его версии                    |
+
+---
+
+#### Версии документов
+
+| Метод | Endpoint                                        | Описание                           |
+|-------|-------------------------------------------------|------------------------------------|
+| POST  | `/documents/{documentId}/versions`              | Загрузить новую версию документа   |
+| DELETE| `/documents/{documentId}/versions/{versionId}`  | Удалить конкретную версию документа |
+| GET   | `/documents/{documentId}/versions/{versionId}/download`| Скачать указанную версию документа |
+
+---
+
+#### Подписи и хэши (используется Document Signing Service)
+
+| Метод | Endpoint                                                  | Описание                                                                 |
+|-------|-----------------------------------------------------------|--------------------------------------------------------------------------|
+| GET   | `/documents/{documentId}/versions/{versionId}/hash`       | Получить Base64-хэш содержимого версии документа                         |
+| POST  | `/documents/{documentId}/versions/{versionId}/signatures` | Сохранить электронную подпись к версии документа                         |
+|       |                                                           | _Вызывается из DSS через WebClient_                                      |
 
 ## CI Pipeline
 
