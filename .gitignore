@@ -56,3 +56,6 @@ info.md
 
 ### liquibase ###
 document-management-service/liquibase.properties
+
+### Keys ###
+.docker/keys/

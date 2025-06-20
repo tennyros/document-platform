@@ -4,6 +4,7 @@ import com.github.tennyros.dto.SaveSignatureRequest;
 import com.github.tennyros.management.entity.DocumentSignature;
 import com.github.tennyros.management.entity.DocumentVersion;
 import com.github.tennyros.management.exception.DocumentVersionNotFoundException;
+import com.github.tennyros.management.mapper.DocumentSignatureMapper;
 import com.github.tennyros.management.repository.jpa.DocumentSignatureRepository;
 import com.github.tennyros.management.repository.jpa.DocumentVersionRepository;
 import com.github.tennyros.management.service.DocumentSignatureService;
@@ -20,6 +21,8 @@ public class DocumentSignatureServiceImpl implements DocumentSignatureService {
     private final DocumentVersionRepository documentVersionRepository;
     private final DocumentSignatureRepository documentSignatureRepository;
 
+    private final DocumentSignatureMapper documentSignatureMapper;
+
     @Override
     @Transactional
     public Long saveSignature(Long documentId, Long versionId, SaveSignatureRequest request) {
@@ -32,16 +35,8 @@ public class DocumentSignatureServiceImpl implements DocumentSignatureService {
             throw new IllegalArgumentException("Signed hash does not match document version hash");
         }
 
-        DocumentSignature signature = DocumentSignature.builder()
-                .documentVersion(version)
-                .signature(request.getSignature())
-                .signatureAlgorithm(request.getSignatureAlgorithm())
-                .certificateSubject(request.getCertificateSubject())
-                .certificateIssuer(request.getCertificateIssuer())
-                .certificateSerialNumber(request.getCertificateSerialNumber())
-                .signedAt(request.getSignedAt())
-                .signedBy(request.getSignedBy())
-                .build();
+        DocumentSignature signature = documentSignatureMapper.toEntity(request);
+        signature.setDocumentVersion(version);
 
         DocumentSignature savedSignature = documentSignatureRepository.save(signature);
         log.info("Signature saved for Document with id={} and Version with id={}", documentId, versionId);

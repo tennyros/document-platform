@@ -7,12 +7,24 @@
 [English documentation](README.md)
 
 **Document Platform** — микросервисное веб-приложение для управления электронными документами и отчетами.  
-Данный репозиторий содержит реализацию микросервиса **Document Management Service** (DMS), который отвечает за:
+Данный репозиторий содержит реализацию микросервисов:
+
+**Document Management Service** (DMS), который отвечает за:
 
 - загрузку, хранение и удаление документов;
 - версионирование документов;
 - хранение и поиск по метаданным;
 - интеграцию с S3-совместимыми хранилищами (MinIO, Amazon S3).
+
+**Document Management Service** (DSS) отвечает за создание и проверку электронной подписи документов.
+
+ Реализованный функционал:
+- получение хэша документа из DMS через HTTP;
+- генерация электронной подписи с использованием RSA и SHA256;
+- проверка подписи по публичному ключу;
+- сохранение метаданных подписи в DMS (подписант, время, сертификат);
+- загрузка ключей (private.key, public.key) из внешнего источника;
+- использование криптопровайдера Bouncy Castle.
 
 ## Стек технологий
 
@@ -23,6 +35,8 @@
 - Hibernate / Spring Data JPA
 - PostgreSQL / Liquibase
 - MongoDB / Mongock
+- WebClient
+- Bouncy Castle (SHA256withRSA)
 - MinIO
 - Elasticsearch + Logstash + Kibana (logging)
 - Docker, Docker Compose
@@ -53,7 +67,14 @@ cd document-platform
 cp .env.example .env
 ```
 
-**3. Запустите приложение и сопутствующие сервисы через Docker:**
+**3. Сгенерируйте для сервиса подписания пару RSA-ключей для локальной разработки:**
+
+```bash
+chmod +x scripts/generate-keys.sh
+./scripts/generate-keys.sh
+```
+
+**4. Запустите приложение и сопутствующие сервисы через Docker:**
 
 ```bash
 # Скопируйте docker-compose.yml файл
@@ -63,10 +84,11 @@ cp docker-compose.example.yml docker-compose.yml
 docker-compose up -d
 ```
 
-**4. После этого API будет доступен по адресу:**
+**5. После этого API будет доступны по адресам:**
 
 ```url
-http://localhost:8090/swagger-ui.html
+http://localhost:8090/swagger-ui.html (Document Management Service)
+http://localhost:8091/swagger-ui.html (Document Signing Service)
 ```
 
 ## API-эндпоинты
@@ -100,6 +122,13 @@ http://localhost:8090/swagger-ui.html
 | GET   | `/documents/{documentId}/versions/{versionId}/hash`       | Получить Base64-хэш содержимого версии документа                         |
 | POST  | `/documents/{documentId}/versions/{versionId}/signatures` | Сохранить электронную подпись к версии документа                         |
 |       |                                                           | _Вызывается из DSS через WebClient_                                      |
+
+### Document Signing Service
+
+| Метод | Endpoint             | Описание                |
+|-------|----------------------|-------------------------|
+| POST  | `/signatures/sign`   | Подписать документ      |
+| GET   | `/signatures/verify` | Верифицировать подпись  |
 
 ## CI Pipeline
 
