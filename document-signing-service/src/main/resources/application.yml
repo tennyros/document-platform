@@ -1,0 +1,25 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: document-signing-service
+
+document:
+  management:
+    service:
+      url: http://document-management-service:8080
+
+signing:
+  private-key: file:${SIGNING_PRIVATE_KEY_PATH}
+  public-key: file:${SIGNING_PUBLIC_KEY_PATH}
+
+security:
+  jwt:
+    secret: your-secret-key-here
+    expiration: 86400000 # 24 hours
+
+app:
+  name: document-signing-service
+
+environment: dev
