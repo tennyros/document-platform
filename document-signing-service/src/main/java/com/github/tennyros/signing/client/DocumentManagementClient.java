@@ -22,7 +22,7 @@ public class DocumentManagementClient {
                 .uri("/api/v1/documents/{documentId}/versions/{versionId}/hash", documentId, versionId)
                 .retrieve()
                 .bodyToMono(DocumentHashResponse.class)
-                .block(); // или .toFuture().get() если синхронно без блокировки
+                .block(); // .toFuture().get() синхронно без блокировки
     }
 
     public Long saveSignature(Long documentId, Long versionId, SaveSignatureRequest request) {

@@ -7,9 +7,8 @@ import com.github.tennyros.management.entity.Document;
 import com.github.tennyros.management.exception.DocumentNotFoundException;
 import com.github.tennyros.management.mapper.DocumentMapper;
 import com.github.tennyros.management.repository.jpa.DocumentRepository;
-import com.github.tennyros.management.repository.jpa.DocumentVersionRepository;
-import com.github.tennyros.management.repository.mongo.DocumentVersionMetadataRepository;
 import com.github.tennyros.management.service.DocumentService;
+import com.github.tennyros.management.service.DocumentVersionMetadataService;
 import com.github.tennyros.management.service.DocumentVersionService;
 import com.github.tennyros.management.service.MinioService;
 import com.github.tennyros.management.specification.DocumentSpecificationBuilder;
@@ -31,10 +30,9 @@ public class DocumentServiceImpl implements DocumentService {
 
     private final MinioService minioService;
     private final DocumentVersionService documentVersionService;
+    private final DocumentVersionMetadataService documentVersionMetadataService;
 
     private final DocumentRepository documentRepository;
-    private final DocumentVersionRepository documentVersionRepository;
-    private final DocumentVersionMetadataRepository documentVersionMetadataRepository;
 
     private final DocumentMapper documentMapper;
 
@@ -58,17 +56,17 @@ public class DocumentServiceImpl implements DocumentService {
         if (!documentRepository.existsById(documentId)) {
             throw new DocumentNotFoundException(String.format("Document with id %s not found", documentId));
         }
-
-        List<DocumentVersionInfo> versions = documentVersionRepository.findVersionInfoByDocumentId(documentId);
+        List<DocumentVersionInfo> versions = documentVersionService.getVersionsInfoByDocumentId(documentId);
 
         versions.forEach(version -> minioService.delete(version.getStorageKey()));
 
         versions.forEach(version -> {
-            log.debug("Deleting Mongo metadata for versionId={}", version.getId());
-            documentVersionMetadataRepository.deleteByDocumentVersionId(version.getId());
+            log.debug("Deleting Metadata for Document Version with id={} from MongoDB", version.getId());
+            documentVersionMetadataService.deleteByDocumentVersionId(version.getId());
+            log.debug("Successfully deleted Metadata for Document Version with id={} from MongoDB", version.getId());
         });
 
-        documentVersionRepository.deleteAllByDocumentId(documentId);
+        documentVersionService.deleteAllByDocumentId(documentId);
         documentRepository.deleteByIdDirect(documentId);
         log.debug("Document with id={} and all versions successfully deleted", documentId);
     }

@@ -1,7 +1,7 @@
 package com.github.tennyros.management.controller;
 
 import com.github.tennyros.dto.DocumentHashResponse;
-import com.github.tennyros.management.dto.version.response.DocumentVersionResponse;
+import com.github.tennyros.management.entity.DocumentVersion;
 import com.github.tennyros.management.service.DocumentVersionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ public class DocumentVersionHashController {
 
     @GetMapping
     public ResponseEntity<DocumentHashResponse> getHash(@PathVariable Long documentId, @PathVariable Long versionId) {
-        DocumentVersionResponse documentVersion = documentVersionService.getDocumentVersion(documentId, versionId);
+        DocumentVersion documentVersion = documentVersionService.getDocumentVersion(documentId, versionId);
         DocumentHashResponse response = DocumentHashResponse.builder()
                 .documentId(documentId)
                 .versionId(versionId)

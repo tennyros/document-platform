@@ -29,6 +29,9 @@ spring:
     enabled: true
     change-log: classpath:/db/changelog/db.changelog-master.xml
 
+application:
+  version: @project.version@
+
 app:
   name: document-management-service
 

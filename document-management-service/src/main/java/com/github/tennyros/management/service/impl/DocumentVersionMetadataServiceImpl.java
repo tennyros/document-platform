@@ -35,10 +35,7 @@ public class DocumentVersionMetadataServiceImpl implements DocumentVersionMetada
     }
 
     @Override
-    public void deleteMetadata(Long documentVersionId) {
-        log.debug("Deleting Metadata for Document Version with id={} from MongoDB", documentVersionId);
-        metadataRepository.findByDocumentVersionId(documentVersionId)
-                .ifPresent(metadataRepository::delete);
-        log.debug("Successfully deleted Metadata for Document Version with id={} from MongoDB", documentVersionId);
+    public void deleteByDocumentVersionId(Long documentVersionId) {
+        metadataRepository.deleteByDocumentVersionId(documentVersionId);
     }
 }

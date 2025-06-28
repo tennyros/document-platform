@@ -36,8 +36,7 @@ public class DocumentSpecificationBuilder extends GenericSpecificationBuilder<Do
         boolean hasVersionFilters = Stream.of(
                 filter.getContentType(),
                 filter.getMinSize(),
-                filter.getMaxSize(),
-                filter.getVersionNumber()
+                filter.getMaxSize()
         ).anyMatch(Objects::nonNull);
 
         if (!hasVersionFilters) return null;
@@ -60,10 +59,6 @@ public class DocumentSpecificationBuilder extends GenericSpecificationBuilder<Do
                 predicates.add(cb.greaterThanOrEqualTo(versions.get("size"), min));
             } else if (max != null) {
                 predicates.add(cb.lessThanOrEqualTo(versions.get("size"), max));
-            }
-
-            if (filter.getVersionNumber() != null) {
-                predicates.add(cb.equal(versions.get("versionNumber"), filter.getVersionNumber()));
             }
 
             return cb.and(predicates.toArray(new Predicate[0]));

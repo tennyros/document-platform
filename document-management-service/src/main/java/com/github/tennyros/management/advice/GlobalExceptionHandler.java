@@ -25,6 +25,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Handles application-wide exceptions and maps them to structured error responses.
+ */
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {

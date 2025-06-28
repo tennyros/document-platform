@@ -10,6 +10,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Custom validation annotation for ensuring uploaded file is not empty.
+ */
 @Documented
 @Constraint(validatedBy = NotEmptyFileValidator.class)
 @Target({ElementType.FIELD})

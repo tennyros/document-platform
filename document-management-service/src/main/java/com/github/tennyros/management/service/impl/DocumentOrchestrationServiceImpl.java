@@ -2,9 +2,9 @@ package com.github.tennyros.management.service.impl;
 
 import com.github.tennyros.management.dto.document.request.DocumentUploadRequest;
 import com.github.tennyros.management.dto.document.response.DocumentResponse;
+import com.github.tennyros.management.dto.version.request.DocumentVersionUploadRequest;
 import com.github.tennyros.management.dto.version.response.DocumentFileDto;
 import com.github.tennyros.management.dto.version.response.DocumentVersionResponse;
-import com.github.tennyros.management.dto.version.request.DocumentVersionUploadRequest;
 import com.github.tennyros.management.entity.Document;
 import com.github.tennyros.management.entity.DocumentVersion;
 import com.github.tennyros.management.exception.DocumentUploadProcessException;
@@ -70,7 +70,7 @@ public class DocumentOrchestrationServiceImpl implements DocumentOrchestrationSe
     @Override
     public DocumentFileDto downloadDocumentVersion(Long documentId, Long versionNumber) {
         log.debug("Starting download orchestration for Document with id={} and Version id={}", documentId, versionNumber);
-        DocumentVersionResponse version = documentVersionService.getDocumentVersion(documentId, versionNumber);
+        DocumentVersion version = documentVersionService.getDocumentVersion(documentId, versionNumber);
         InputStream inputStream = minioService.download(version.getStorageKey());
         return new DocumentFileDto(
                 version.getFilename(),

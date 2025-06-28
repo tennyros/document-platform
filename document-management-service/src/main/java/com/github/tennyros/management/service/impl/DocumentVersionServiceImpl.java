@@ -3,7 +3,6 @@ package com.github.tennyros.management.service.impl;
 import com.github.tennyros.management.dto.document.request.DocumentUploadRequest;
 import com.github.tennyros.management.dto.version.DocumentVersionInfo;
 import com.github.tennyros.management.dto.version.request.DocumentVersionUploadRequest;
-import com.github.tennyros.management.dto.version.response.DocumentVersionResponse;
 import com.github.tennyros.management.entity.Document;
 import com.github.tennyros.management.entity.DocumentVersion;
 import com.github.tennyros.management.exception.DocumentNotFoundException;
@@ -24,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -91,13 +91,13 @@ public class DocumentVersionServiceImpl implements DocumentVersionService {
 
     @Override
     @Transactional(readOnly = true)
-    public DocumentVersionResponse getDocumentVersion(Long documentId, Long versionNumber) {
+    public DocumentVersion getDocumentVersion(Long documentId, Long versionNumber) {
         log.debug("Fetching information about Document Version with id={} of Document with id={} from PostgreSQL",
                 versionNumber, documentId);
-        return documentVersionMapper.toDto(documentVersionRepository.findByDocumentIdAndVersionNumber(documentId, versionNumber)
+        return documentVersionRepository.findByDocumentIdAndVersionNumber(documentId, versionNumber)
                 .orElseThrow(() ->
                         new DocumentNotFoundException(String.format(
-                                "Version id %d of Document with id %d not found ", versionNumber, documentId))));
+                                "Version id %d of Document with id %d not found ", versionNumber, documentId)));
     }
 
     @Override
@@ -108,7 +108,7 @@ public class DocumentVersionServiceImpl implements DocumentVersionService {
         }
 
         Optional<DocumentVersionInfo> versionInfo = documentVersionRepository
-                .findVersionInfoByDocumentId(documentId).stream()
+                .findVersionsInfoByDocumentId(documentId).stream()
                 .filter(v -> v.getVersionNumber().equals(versionNumber))
                 .findFirst();
 
@@ -119,12 +119,26 @@ public class DocumentVersionServiceImpl implements DocumentVersionService {
 
         minioService.delete(versionInfo.get().getStorageKey());
 
-        documentVersionMetadataService.deleteMetadata(versionNumber);
+        log.debug("Deleting Metadata for Document Version with id={} from MongoDB", versionNumber);
+        documentVersionMetadataService.deleteByDocumentVersionId(versionNumber);
+        log.debug("Successfully deleted Metadata for Document Version with id={} from MongoDB", versionNumber);
 
         int deleted = documentVersionRepository.deleteByDocumentIdAndVersionNumberDirect(documentId, versionNumber);
         if (deleted == 0) {
             throw new DocumentVersionNotFoundException(String.format("Failed to delete version %s", versionNumber));
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<DocumentVersionInfo> getVersionsInfoByDocumentId(Long documentId) {
+        return documentVersionRepository.findVersionsInfoByDocumentId(documentId);
+    }
+
+    @Override
+    @Transactional
+    public void deleteAllByDocumentId(Long documentId) {
+        documentVersionRepository.deleteAllByDocumentId(documentId);
     }
 
     private DocumentVersion buildDocumentVersion(

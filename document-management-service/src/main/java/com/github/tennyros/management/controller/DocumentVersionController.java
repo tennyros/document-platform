@@ -1,8 +1,9 @@
 package com.github.tennyros.management.controller;
 
+import com.github.tennyros.management.dto.version.request.DocumentVersionUploadRequest;
 import com.github.tennyros.management.dto.version.response.DocumentFileDto;
 import com.github.tennyros.management.dto.version.response.DocumentVersionResponse;
-import com.github.tennyros.management.dto.version.request.DocumentVersionUploadRequest;
+import com.github.tennyros.management.mapper.DocumentVersionMapper;
 import com.github.tennyros.management.service.DocumentOrchestrationService;
 import com.github.tennyros.management.service.DocumentVersionService;
 import com.github.tennyros.management.util.ContentDispositionUtil;
@@ -33,6 +34,8 @@ public class DocumentVersionController {
     private final DocumentVersionService documentVersionService;
     private final DocumentOrchestrationService documentOrchestrationService;
 
+    private final DocumentVersionMapper documentVersionMapper;
+
     @PostMapping
     public ResponseEntity<DocumentVersionResponse> uploadVersion(@PathVariable Long documentId,
                                                                  @Valid @ModelAttribute DocumentVersionUploadRequest request) {
@@ -46,7 +49,8 @@ public class DocumentVersionController {
     public ResponseEntity<DocumentVersionResponse> getDocumentVersion(@PathVariable Long documentId,
                                                                       @PathVariable Long versionId) {
         log.info("Fetching data of Version with id={} and Document with id={}", versionId, documentId);
-        DocumentVersionResponse response = documentVersionService.getDocumentVersion(documentId, versionId);
+        DocumentVersionResponse response = documentVersionMapper.toDto(
+                documentVersionService.getDocumentVersion(documentId, versionId));
         log.info("Successfully fetched data of Version with id={} and Document with id={}", versionId, documentId);
         return ResponseEntity.ok(response);
     }

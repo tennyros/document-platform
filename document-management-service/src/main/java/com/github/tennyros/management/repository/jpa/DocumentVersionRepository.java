@@ -19,17 +19,37 @@ public interface DocumentVersionRepository extends JpaRepository<DocumentVersion
 
     Optional<DocumentVersion> findByDocumentIdAndVersionNumber(Long documentId, Long versionNumber);
 
+    /**
+     * Deletes all Document Versions associated with the specified Document.
+     *
+     * @param documentId the ID of the parent Document whose versions should be deleted
+     */
     @Modifying
     @Query("DELETE FROM DocumentVersion dv WHERE dv.document.id = :documentId")
     void deleteAllByDocumentId(@Param("documentId") Long documentId);
 
-    @Query("SELECT new com.github.tennyros.management.dto.version.DocumentVersionInfo(v.id, v.storageKey, v.versionNumber) " +
+    /**
+     * Retrieves a list of version information (ID, storage key, and version number)
+     * for all Document Versions associated with the specified Document.
+     *
+     * @param documentId the ID of the parent Document
+     * @return a list of {@link DocumentVersionInfo}
+     *         containing version details for the Document
+     */
+    @Query("SELECT new com.github.tennyros.management.dto.version.DocumentVersionInfo(" +
+           "v.id, v.storageKey, v.versionNumber) " +
            "FROM DocumentVersion v WHERE v.document.id = :documentId")
-    List<DocumentVersionInfo> findVersionInfoByDocumentId(@Param("documentId") Long documentId);
+    List<DocumentVersionInfo> findVersionsInfoByDocumentId(@Param("documentId") Long documentId);
 
+    /**
+     * Deletes a specific Document Version by its Document ID and Version number.
+     *
+     * @param documentId the ID of the parent Document
+     * @param versionNumber the version number of the Document Version to delete
+     * @return the number of deleted rows (0 if no such version exists)
+     */
     @Modifying
     @Query("DELETE FROM DocumentVersion v WHERE v.document.id = :documentId AND v.versionNumber = :versionNumber")
     int deleteByDocumentIdAndVersionNumberDirect(@Param("documentId") Long documentId,
                                                  @Param("versionNumber") Long versionNumber);
-
 }

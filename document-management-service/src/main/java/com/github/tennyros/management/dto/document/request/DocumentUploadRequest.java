@@ -1,6 +1,7 @@
 package com.github.tennyros.management.dto.document.request;
 
 import com.github.tennyros.management.annotation.NotEmptyFile;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,5 +26,6 @@ public class DocumentUploadRequest {
     private String description;
 
     @NotEmptyFile
+    @Schema(description = "Document file", required = true, type = "string", format = "binary")
     private MultipartFile file;
 }
